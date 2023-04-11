@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../api/getCharacter.dart';
+
 class herosList extends StatefulWidget {
   @override
   _herosListState createState() => _herosListState();
@@ -33,15 +35,25 @@ class _herosListState extends State<herosList> {
               createSilverAppBar()
             ];
           },
-          body: ListView.builder(
-            itemCount: itemList.length,
-            itemBuilder: (context, index){
-              return Card(
-                child: ListTile(
-                  title: Text(itemList[index]),
+          body: FutureBuilder<List<MarvelCharacter>>(
+          future: fetchMarvelCharacters(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final characters = snapshot.data!;
+              return MarvelCharactersList(characters: characters);
+            } else if (snapshot.hasError) {
+              return Text('Failed to fetch Marvel characters. Error: ${snapshot.error}');
+            } else {
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red), // Set color of CircularProgressIndicator
+                  strokeWidth: 5.0, // Set strokeWidth of CircularProgressIndicator
                 ),
               );
-          })),
+            }
+          },
+        ),
+      ),
     );
   }
 
