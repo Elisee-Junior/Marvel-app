@@ -28,8 +28,8 @@ class _herosListState extends State<herosList> {
           future: fetchMarvelCharacters(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              final characters = snapshot.data!;
-              return MarvelCharactersList(characters: characters);
+              // final characters = snapshot.data!;
+              return MarvelCharactersList();
             } else if (snapshot.hasError) {
               return Text('Failed to fetch Marvel characters. Error: ${snapshot.error}');
             } else {

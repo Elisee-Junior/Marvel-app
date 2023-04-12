@@ -10,26 +10,87 @@ class MarvelCharacter {
 
   MarvelCharacter({required this.id, required this.name, required this.thumbnailUrl});
 }
+class MarvelCharactersList extends StatefulWidget {
+  @override
+  _MarvelCharactersListState createState() => _MarvelCharactersListState();
+}
 
-class MarvelCharactersList extends StatelessWidget {
-  final List<MarvelCharacter> characters;
+class _MarvelCharactersListState extends State<MarvelCharactersList> {
+  ScrollController _scrollController = ScrollController();
+  List<MarvelCharacter> characters = [];
+  bool isLoading = false;
 
-  MarvelCharactersList({required this.characters});
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll); // Add scroll listener
+    fetchCharacters(); // Fetch initial characters
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll); // Remove scroll listener
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    if (_scrollController.position.maxScrollExtent == _scrollController.offset &&
+        !isLoading) {
+      // When reaching the end of the list, fetch more characters
+      fetchCharacters();
+    }
+  }
+
+  void fetchCharacters() async {
+    setState(() {
+      isLoading = true; // Set loading state to indicate fetching is in progress
+    });
+
+    try {
+      List<MarvelCharacter> fetchedCharacters = await fetchMarvelCharacters();
+      setState(() {
+        characters.addAll(fetchedCharacters); // Add fetched characters to the list
+        isLoading = false; // Update loading state to indicate fetching is complete
+      });
+    } catch (error) {
+      setState(() {
+        isLoading = false; // Update loading state to indicate fetching is complete
+      });
+      print('Error fetching Marvel characters: $error');
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: characters.length,
-      itemBuilder: (context, index) {
-        final character = characters[index];
-        return ListTile(
-          title: Text(character.name),
-          leading: Image.network(character.thumbnailUrl),
-        );
+    return NotificationListener<ScrollNotification>(
+      onNotification: (scrollNotification) {
+        if (scrollNotification is ScrollEndNotification &&
+            scrollNotification.metrics.extentAfter == 0) {
+          // When scroll ends and reaches the end of the list, fetch more characters
+          fetchCharacters();
+        }
+        return false;
       },
+      child: ListView.builder(
+        controller: _scrollController, // Set the scroll controller
+        itemCount: characters.length,
+        itemBuilder: (context, index) {
+          final character = characters[index];
+          return ListTile(
+            title: Text(character.name),
+            leading: Image.network(character.thumbnailUrl),
+          );
+        },
+      ),
     );
   }
 }
+
+
 
 Future<List<MarvelCharacter>> fetchMarvelCharacters() async {
   final String publicKey = '59129ed11dd04dc0877aacad252feb7f';
@@ -52,7 +113,7 @@ Future<List<MarvelCharacter>> fetchMarvelCharacters() async {
         thumbnailUrl: data['thumbnail']['path'] + '.' + data['thumbnail']['extension'],
       );
     }).toList();
-
+    print(characters);
     return characters;
   } else {
     throw Exception('Failed to fetch Marvel characters. Error: ${response.statusCode}');
