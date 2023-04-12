@@ -14,17 +14,6 @@ class _herosListState extends State<herosList> {
   );
   bool isSearchClicked = false;
   final TextEditingController _filter = new TextEditingController();
-  
-  List<String> itemList = [];
-
-  @override
-  void initState() {
-
-    for(int count = 0; count < 50; count++)
-    {
-      itemList.add("Item $count");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
