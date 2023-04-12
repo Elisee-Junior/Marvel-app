@@ -16,7 +16,7 @@ class MarvelCharactersList extends StatefulWidget {
 }
 
 class _MarvelCharactersListState extends State<MarvelCharactersList> {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   List<MarvelCharacter> characters = [];
   bool isLoading = false;
 
@@ -93,9 +93,9 @@ class _MarvelCharactersListState extends State<MarvelCharactersList> {
 
 
 Future<List<MarvelCharacter>> fetchMarvelCharacters() async {
-  final String publicKey = '59129ed11dd04dc0877aacad252feb7f';
-  final String privateKey = 'ac682c537e6aeb149ff5482ea5fc9cada8b16461';
-  final String apiUrl = 'https://gateway.marvel.com/v1/public/characters';
+  const String publicKey = '59129ed11dd04dc0877aacad252feb7f';
+  const String privateKey = 'ac682c537e6aeb149ff5482ea5fc9cada8b16461';
+  const String apiUrl = 'https://gateway.marvel.com/v1/public/characters';
 
   final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
   final hash = md5.convert(utf8.encode('$timestamp$privateKey$publicKey')).toString();
@@ -105,15 +105,14 @@ Future<List<MarvelCharacter>> fetchMarvelCharacters() async {
   if (response.statusCode == 200) {
     final jsonResponse = json.decode(response.body);
     final List<dynamic> characterData = jsonResponse['data']['results'];
-
+    print(characterData);
     final List<MarvelCharacter> characters = characterData.map((data) {
       return MarvelCharacter(
         id: data['id'],
-        name: data['name'],
+        name: data['name'],   
         thumbnailUrl: data['thumbnail']['path'] + '.' + data['thumbnail']['extension'],
       );
     }).toList();
-    print(characters);
     return characters;
   } else {
     throw Exception('Failed to fetch Marvel characters. Error: ${response.statusCode}');

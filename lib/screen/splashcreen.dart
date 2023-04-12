@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:marvel_app/screen/herosList.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -83,41 +82,39 @@ class InitState extends State<SplashScreen> with TickerProviderStateMixin {
           Positioned(
             bottom: 60,
             right: 30,
+            child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => herosList()),
+              );
+            },
             child: Container(
-              child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => herosList()),
-                );
-              },
-              child: Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.only(left: 20, right: 20, top: 70),
-                padding: EdgeInsets.only(left: 20, right: 20),
-                height: 44,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [(Color(0xffff1c24)), Color.fromARGB(255, 241, 91, 96)],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight
-                  ),
-                  borderRadius: BorderRadius.circular(40),
-                  color: Colors.grey[200],
-                  boxShadow: [
-                    BoxShadow(
-                        offset: Offset(0, 10),
-                        blurRadius: 60,
-                        color: Color(0xffEEEEEE)
-                    ),
-                  ],
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(left: 20, right: 20, top: 70),
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              height: 44,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(colors: [(Color(0xffff1c24)), Color.fromARGB(255, 241, 91, 96)],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight
                 ),
-                child: Text(
-                  "Get Started",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                borderRadius: BorderRadius.circular(40),
+                color: Colors.grey[200],
+                boxShadow: const [
+                  BoxShadow(
+                      offset: Offset(0, 10),
+                      blurRadius: 60,
+                      color: Color(0xffEEEEEE)
                   ),
+                ],
+              ),
+              child: const Text(
+                "Get Started",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                 ),
               ),
             ),

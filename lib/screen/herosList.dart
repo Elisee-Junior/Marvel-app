@@ -1,19 +1,23 @@
+
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../api/getCharacter.dart';
 
 class herosList extends StatefulWidget {
+  const herosList({super.key});
+
   @override
   _herosListState createState() => _herosListState();
 }
 
 class _herosListState extends State<herosList> {
-  Icon _searchIcon = Icon(
+  Icon _searchIcon = const Icon(
     Icons.search,
   );
   bool isSearchClicked = false;
-  final TextEditingController _filter = new TextEditingController();
+  final TextEditingController _filter = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,7 @@ class _herosListState extends State<herosList> {
             } else if (snapshot.hasError) {
               return Text('Failed to fetch Marvel characters. Error: ${snapshot.error}');
             } else {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.red), // Set color of CircularProgressIndicator
                   strokeWidth: 5.0, // Set strokeWidth of CircularProgressIndicator
@@ -51,15 +55,16 @@ class _herosListState extends State<herosList> {
       actions: <Widget>[
         RawMaterialButton(
           elevation: 0.0,
+          // ignore: sort_child_properties_last
           child: _searchIcon,
           onPressed: () {
             _searchPressed();
           },
-          constraints: BoxConstraints.tightFor(
+          constraints: const BoxConstraints.tightFor(
             width: 56,
             height: 56,
           ),
-          shape: CircleBorder(),
+          shape: const CircleBorder(),
         ),
         
       ],
@@ -67,25 +72,25 @@ class _herosListState extends State<herosList> {
       floating: false,
       pinned: true,
         flexibleSpace: FlexibleSpaceBar(
-        titlePadding: EdgeInsets.only(bottom: 15),
+        titlePadding: const EdgeInsets.only(bottom: 15),
         centerTitle: true,
         title:isSearchClicked ? Container(
-          padding: EdgeInsets.only(bottom: 2),
+          padding: const EdgeInsets.only(bottom: 2),
           constraints:
-              BoxConstraints(minHeight: 40, maxHeight: 40),
+              const BoxConstraints(minHeight: 40, maxHeight: 40),
           width: 220,
           child: CupertinoTextField(
             controller: _filter,
             keyboardType: TextInputType.text,
             placeholder: "Search..",
-            placeholderStyle: TextStyle(
+            placeholderStyle: const TextStyle(
               color: Color(0xffC4C6CC),
               fontSize: 14.0,
               fontFamily: 'Brutal',
             ),
-            prefix: Padding(
+            prefix: const Padding(
               padding:
-                  const EdgeInsets.fromLTRB(9.0, 6.0, 9.0, 6.0),
+                  EdgeInsets.fromLTRB(9.0, 6.0, 9.0, 6.0),
               child: Icon(Icons.search, ),
             ),
             decoration: BoxDecoration(
@@ -93,7 +98,7 @@ class _herosListState extends State<herosList> {
               color: Colors.white,
             ),
           ),
-        ) : Text("Heros Wiki"),
+        ) : const Text("Heros Wiki"),
         background: Image.network("https://th.bing.com/th/id/R.0a32abf0e9836c1d8cc0a08d24dc8ff7?rik=%2fv27gLeIjcYSAw&pid=ImgRaw&r=0", fit: BoxFit.cover,)
       ),
       backgroundColor:Color(0xffff1c24),
@@ -102,13 +107,13 @@ class _herosListState extends State<herosList> {
 
   void _searchPressed() {
     setState(() {
-      if (this._searchIcon.icon == Icons.search) {
-        this._searchIcon = Icon(
+      if (_searchIcon.icon == Icons.search) {
+        _searchIcon = const Icon(
           Icons.close,
         );
         isSearchClicked = true;
       } else {
-        this._searchIcon = Icon(
+        _searchIcon = const Icon(
           Icons.search,
           
         );
