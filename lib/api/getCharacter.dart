@@ -32,9 +32,9 @@ class MarvelCharactersList extends StatelessWidget {
 }
 
 Future<List<MarvelCharacter>> fetchMarvelCharacters() async {
-  final String publicKey = '59129ed11dd04dc0877aacad252feb7f';
-  final String privateKey = 'ac682c537e6aeb149ff5482ea5fc9cada8b16461';
-  final String apiUrl = 'https://gateway.marvel.com/v1/public/characters';
+  const String publicKey = '59129ed11dd04dc0877aacad252feb7f';
+  const String privateKey = 'ac682c537e6aeb149ff5482ea5fc9cada8b16461';
+  const String apiUrl = 'https://gateway.marvel.com/v1/public/characters';
 
   final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
   final hash = md5.convert(utf8.encode('$timestamp$privateKey$publicKey')).toString();
